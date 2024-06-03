@@ -9,11 +9,9 @@ import java.util.Random;
 class HospedeManager {
     private static HospedeManager instance;
     private List<Hospede> hospedes;
-    private List<HospedeObserver> observers;
 
     private HospedeManager() {
         hospedes = new ArrayList<>();
-        observers = new ArrayList<>();
     }
 
     public static synchronized HospedeManager getInstance() {
@@ -25,40 +23,16 @@ class HospedeManager {
 
     public void addHospede(Hospede hospede) {
         hospedes.add(hospede);
-        notifyObservers();
     }
 
     public void removeHospede(int index) {
         if (index >= 0 && index < hospedes.size()) {
             hospedes.remove(index);
-            notifyObservers();
         }
     }
 
     public List<Hospede> getHospedes() {
         return hospedes;
-    }
-
-    public void addObserver(HospedeObserver observer) {
-        observers.add(observer);
-    }
-
-    private void notifyObservers() {
-        for (HospedeObserver observer : observers) {
-            observer.update();
-        }
-    }
-}
-
-// Observer: Interface para notificação de mudanças
-interface HospedeObserver {
-    void update();
-}
-
-// Factory Method: Classe para criar hóspedes
-class HospedeFactory {
-    public Hospede createHospede(String nome, String email, String telefone, String endereco) {
-        return new Hospede(nome, email, telefone, endereco);
     }
 }
 
@@ -116,9 +90,7 @@ public class Hospede implements IExibirDados {
 
     public static void menu() {
         int option;
-        HospedeFactory factory = new HospedeFactory();
         HospedeManager manager = HospedeManager.getInstance();
-        manager.addObserver(() -> System.out.println("Lista de hóspedes atualizada."));
 
         do {
             System.out.println("=== Hóspedes ===");
@@ -130,7 +102,7 @@ public class Hospede implements IExibirDados {
             option = Hotel.INPUT.nextInt();
             switch (option) {
                 case 1:
-                    gerarHospedes(factory, manager);
+                    gerarHospedes(manager);
                     break;
                 case 2:
                     mudarEstadoDeHospede();
@@ -147,9 +119,9 @@ public class Hospede implements IExibirDados {
         } while (option != SAIR_MENU_HOSPEDE_INDEX);
     }
 
-    private static void gerarHospedes(HospedeFactory factory, HospedeManager manager) {
+    private static void gerarHospedes(HospedeManager manager) {
         for (int i = 0; i < 30; i++) {
-            Hospede hospede = factory.createHospede(
+            Hospede hospede = new Hospede(
                     "Nome" + (manager.getHospedes().size() + 1),
                     "email" + (manager.getHospedes().size() + 1) + "@example.com",
                     "Telefone" + (manager.getHospedes().size() + 1),
