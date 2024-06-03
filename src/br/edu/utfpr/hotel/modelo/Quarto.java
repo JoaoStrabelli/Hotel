@@ -3,6 +3,8 @@ package br.edu.utfpr.hotel.modelo;
 import br.edu.utfpr.hotel.Hotel;
 import br.edu.utfpr.hotel.estado.Disponivel;
 import br.edu.utfpr.hotel.estado.Estado;
+import br.edu.utfpr.hotel.estado.Indisponivel;
+import br.edu.utfpr.hotel.estado.Ocupado;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -22,8 +24,6 @@ public class Quarto implements IExibirDados {
         this.valor = valor;
         this.estado = estado;
     }
-
-
 
     @Override
     public void exibirDados() {
@@ -53,8 +53,6 @@ public class Quarto implements IExibirDados {
     public void setEstado(Estado estado) {
         this.estado = estado;
     }
-
-
 
     public static void menu() {
         int option;
@@ -95,7 +93,42 @@ public class Quarto implements IExibirDados {
         }
     }
 
-    private static void mudarEstadoDeQuarto() { // TODO
+    private static void mudarEstadoDeQuarto() {
+        if(QUARTOS.isEmpty()) {
+            System.out.println("ERRO: Não há quartos registrados. Tente novamente após registrar alguns quartos.");
+            return;
+        }
+
+        int option;
+        do {
+            System.out.println("Digite o id do quarto ou 0 para voltar: ");
+            option = Hotel.INPUT.nextInt();
+            if(option > 0 && option < QUARTOS.size() + 1) {
+                option--;
+                String state;
+                boolean hasStateChanged = false;
+                //if(option == QUARTOS.size())
+                do {
+                    System.out.println("Escolha o estado (disponivel, indisponivel, ocupado): ");
+                    state = Hotel.INPUT.nextLine();
+                    switch(state) {
+                        case "disponível", "disponivel":
+                            QUARTOS.get(option).setEstado(new Disponivel(QUARTOS.get(option)));
+                            hasStateChanged = true;
+                            break;
+                        case "indisponível", "indisponivel":
+                            QUARTOS.get(option).setEstado(new Indisponivel(QUARTOS.get(option)));
+                            hasStateChanged = true;
+                            break;
+                        case "ocupado":
+                            QUARTOS.get(option).setEstado(new Ocupado(QUARTOS.get(option)));
+                            hasStateChanged = true;
+                            break;
+                    }
+                } while(!hasStateChanged);
+                System.out.println("O estado do quarto foi alterado.");
+            }
+        } while(option > 0);
     }
 
     private static void removerQuarto() {
@@ -108,8 +141,8 @@ public class Quarto implements IExibirDados {
         do {
             System.out.println("Digite o id do quarto ou 0 para voltar: ");
             option = Hotel.INPUT.nextInt();
-            if(option > 0) {
-                QUARTOS.remove(option);
+            if(option > 0 && option < QUARTOS.size() + 1) {
+                QUARTOS.remove(option - 1);
                 System.out.println("Quarto removido com sucesso!");
             }
         } while(option > 0);
