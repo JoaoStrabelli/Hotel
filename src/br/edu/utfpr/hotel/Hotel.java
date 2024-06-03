@@ -1,5 +1,6 @@
 package br.edu.utfpr.hotel;
 
+import br.edu.utfpr.hotel.modelo.Hospede;
 import br.edu.utfpr.hotel.modelo.Quarto;
 
 import java.util.Scanner;
@@ -23,6 +24,8 @@ public class Hotel {
                     Quarto.menu();
                     break;
                 default:
+                case 2:
+                    Hospede.menu();
                     break;
             }
         } while(option != SAIR_MENU_INDEX);
