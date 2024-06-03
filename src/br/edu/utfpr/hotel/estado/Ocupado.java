@@ -26,4 +26,8 @@ public class Ocupado implements Estado {
         mensagemErro("limpo");
     }
 
+    @Override
+    public String getNome() {
+        return "Ocupado";
+    }
 }

@@ -6,6 +6,7 @@ public interface Estado {
     void desocupar();
     void limpar();
 
+    String getNome();
 
     default void mensagemErro(String estado) {
         System.out.printf("ERRO: Quarto já está %s!%n", estado);

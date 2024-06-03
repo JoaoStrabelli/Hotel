@@ -25,4 +25,8 @@ public class Disponivel implements Estado {
         System.out.println("ERRO: Já está limpo!");
     }
 
+    @Override
+    public String getNome() {
+        return "Disponível";
+    }
 }

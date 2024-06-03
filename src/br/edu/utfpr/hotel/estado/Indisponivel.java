@@ -25,4 +25,9 @@ public class Indisponivel implements Estado {
         quarto.setEstado(new Disponivel(quarto));
         System.out.println("SUCESSO: Limpado e novamente disponível!");
     }
+
+    @Override
+    public String getNome() {
+        return "Indisponivel";
+    }
 }
