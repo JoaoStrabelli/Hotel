@@ -17,16 +17,17 @@ public class Hotel {
             System.out.println();
             System.out.println("=== Menu Principal ===");
             System.out.println("1 - Quartos");
+            System.out.println("2 - Hospedes");
             System.out.println("4 - Sair");
             option = INPUT.nextInt();
             switch(option) {
                 case 1:
                     Quarto.menu();
                     break;
-                default:
                 case 2:
                     Hospede.menu();
                     break;
+                default:
             }
         } while(option != SAIR_MENU_INDEX);
     }
