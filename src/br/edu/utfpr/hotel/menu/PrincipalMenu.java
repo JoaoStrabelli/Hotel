@@ -20,7 +20,7 @@ public class PrincipalMenu {
                     QUARTO_MENU.abrir();
                     break;
                 case 2:
-                    Hospede.menu(); // FIXME
+                    HOSPEDE_MENU.abrir();
                     break;
                 default:
             }
@@ -28,6 +28,7 @@ public class PrincipalMenu {
     }
 
     private static final QuartoMenu QUARTO_MENU = new QuartoMenu();
+    private static final HospedeMenu HOSPEDE_MENU = new HospedeMenu();
 
     private static final int SAIR_MENU_INDEX = 4;
 }

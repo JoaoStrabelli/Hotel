@@ -18,7 +18,7 @@ public abstract class Pessoa {
         return nome;
     }
 
-    protected void setNome(String nome) {
+    public void setNome(String nome) {
         this.nome = nome;
     }
 
@@ -26,7 +26,7 @@ public abstract class Pessoa {
         return email;
     }
 
-    protected void setEmail(String email) {
+    public void setEmail(String email) {
         this.email = email;
     }
 
@@ -34,7 +34,7 @@ public abstract class Pessoa {
         return telefone;
     }
 
-    protected void setTelefone(String telefone) {
+    public void setTelefone(String telefone) {
         this.telefone = telefone;
     }
 
@@ -42,7 +42,7 @@ public abstract class Pessoa {
         return endereco;
     }
 
-    protected void setEndereco(String endereco) {
+    public void setEndereco(String endereco) {
         this.endereco = endereco;
     }
 }
