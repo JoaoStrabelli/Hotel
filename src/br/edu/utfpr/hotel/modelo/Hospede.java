@@ -3,19 +3,13 @@ package br.edu.utfpr.hotel.modelo;
 import br.edu.utfpr.hotel.Hotel;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
-// Singleton: Classe que gerencia a lista de hóspedes
 class HospedeManager {
     private static HospedeManager instance;
-    private List<Hospede> hospedes;
+    private final List<Hospede> hospedes = new ArrayList<>();
 
-    private HospedeManager() {
-        hospedes = new ArrayList<>();
-    }
-
-    public static synchronized HospedeManager getInstance() {
-        if (instance == null) {
+    public static HospedeManager getInstance() {
+        if(instance == null) {
             instance = new HospedeManager();
         }
         return instance;
@@ -26,7 +20,7 @@ class HospedeManager {
     }
 
     public void removeHospede(int index) {
-        if (index >= 0 && index < hospedes.size()) {
+        if(index >= 0 && index < hospedes.size()) {
             hospedes.remove(index);
         }
     }
@@ -36,57 +30,20 @@ class HospedeManager {
     }
 }
 
-// Classe Hospede implementando IExibirDados
-public class Hospede implements IExibirDados {
-    private String nome;
-    private String email;
-    private String telefone;
-    private String endereco;
+
+public class Hospede extends Pessoa implements IExibirDados {
+
+    protected final Reserva reserva = null; // FIXME
 
     public Hospede(String nome, String email, String telefone, String endereco) {
-        this.nome = nome;
-        this.email = email;
-        this.telefone = telefone;
-        this.endereco = endereco;
+        super(nome, email, telefone, endereco);
     }
 
     @Override
     public void exibirDados() {
-        System.out.printf("Nome: %s, Email: %s, Telefone: %s, Endereço: %s%n", nome, email, telefone, endereco);
+        System.out.printf("Nome: %s, Email: %s, Telefone: %s, Endereço: %s%n", getNome(), getEmail(), getTelefone(), getEndereco());
     }
 
-    // Getters e Setters
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getTelefone() {
-        return telefone;
-    }
-
-    public void setTelefone(String telefone) {
-        this.telefone = telefone;
-    }
-
-    public String getEndereco() {
-        return endereco;
-    }
-
-    public void setEndereco(String endereco) {
-        this.endereco = endereco;
-    }
 
     public static void menu() {
         int option;
