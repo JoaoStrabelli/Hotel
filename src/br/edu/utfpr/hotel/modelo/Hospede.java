@@ -8,10 +8,14 @@ public class Hospede extends Pessoa implements IExibirDados {
 
     public Reserva reserva;
 
-    public Hospede(String nome, String email, String telefone, String endereco) {
-        super(nome, email, telefone, endereco);
+    public Hospede(Builder builder, Reserva reserva) {
+        super(builder);
+        this.reserva = reserva;
     }
 
+    public Hospede(Builder builder) {
+        super(builder);
+    }
 
     public Reserva getReserva() {
         return reserva;

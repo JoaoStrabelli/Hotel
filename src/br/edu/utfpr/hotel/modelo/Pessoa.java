@@ -1,48 +1,75 @@
 package br.edu.utfpr.hotel.modelo;
 
-public abstract class Pessoa {
+public class Pessoa {
 
-    private String nome;
-    private String email;
-    private String telefone;
-    private String endereco;
+    private final Builder builder;
 
-    public Pessoa(String nome, String email, String telefone, String endereco) {
-        this.nome = nome;
-        this.email = email;
-        this.telefone = telefone;
-        this.endereco = endereco;
+    public Pessoa(Builder builder) {
+        this.builder = builder;
     }
 
     public String getNome() {
-        return nome;
+        return builder.nome;
     }
 
     public void setNome(String nome) {
-        this.nome = nome;
+        builder.nome = nome;
     }
 
     public String getEmail() {
-        return email;
+        return builder.email;
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        builder.email = email;
     }
 
     public String getTelefone() {
-        return telefone;
+        return builder.telefone;
     }
 
     public void setTelefone(String telefone) {
-        this.telefone = telefone;
+        builder.telefone = telefone;
     }
 
     public String getEndereco() {
-        return endereco;
+        return builder.endereco;
     }
 
     public void setEndereco(String endereco) {
-        this.endereco = endereco;
+        this.builder.endereco = endereco;
+    }
+
+    public static class Builder {
+
+        private String nome;
+
+        private String email;
+        private String telefone;
+        private String endereco;
+
+        public Builder(String nome){
+            this.nome = nome;
+        }
+
+        public Builder email(String email) {
+            this.email = email;
+            return this;
+        }
+
+        public Builder telefone(String telefone) {
+            this.telefone = telefone;
+            return this;
+        }
+
+        public Builder endereco(String endereco) {
+            this.endereco = endereco;
+            return this;
+        }
+
+        public Pessoa build(){
+            return new Pessoa(this);
+        }
+
     }
 }

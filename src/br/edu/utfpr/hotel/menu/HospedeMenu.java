@@ -4,6 +4,7 @@ import br.edu.utfpr.hotel.Hotel;
 import br.edu.utfpr.hotel.estado.Indisponivel;
 import br.edu.utfpr.hotel.estado.Ocupado;
 import br.edu.utfpr.hotel.modelo.Hospede;
+import br.edu.utfpr.hotel.modelo.Pessoa;
 import br.edu.utfpr.hotel.modelo.Quarto;
 import br.edu.utfpr.hotel.modelo.Reserva;
 
@@ -25,12 +26,11 @@ public class HospedeMenu extends AbstractMenu {
     @Override
     protected void gerar() {
         for (int i = 0; i < 30; i++) {
-            Hospede hospede = new Hospede(
-                    "Nome" + (hospedeManager.size() + 1),
-                    "email" + (hospedeManager.size() + 1) + "@example.com",
-                    "Telefone" + (hospedeManager.size() + 1),
-                    "Endereço " + (hospedeManager.size() + 1)
-            );
+            Pessoa.Builder builder = new Pessoa.Builder("Nome" + (hospedeManager.size() + 1))
+                .email("email" + (hospedeManager.size() + 1) + "@example.com")
+                .telefone("Telefone" + (hospedeManager.size() + 1))
+                .endereco("Endereço " + (hospedeManager.size() + 1));
+            Hospede hospede = new Hospede(builder);
             hospedeManager.addHospede(hospede);
         }
         System.out.println("30 hóspedes gerados com sucesso!");
@@ -94,7 +94,7 @@ public class HospedeMenu extends AbstractMenu {
                 } else {
                     System.out.println("Hóspede informado não tem reservas.");
                 }
-                System.out.println("Reserva realizada com sucesso!");
+                System.out.println("Checout realizado com sucesso!");
             } else if (option != 0) {
                 System.out.println("Índice inválido. Tente novamente.");
             }
