@@ -12,7 +12,7 @@ public class PrincipalMenu {
             System.out.println("=== Menu Principal ===");
             System.out.println("1 - Quartos");
             System.out.println("2 - Hospedes");
-            System.out.println("4 - Sair");
+            System.out.println("3 - Sair");
             option = Hotel.INPUT.nextInt();
             switch(option) {
                 case 1:
@@ -29,5 +29,5 @@ public class PrincipalMenu {
     private static final QuartoMenu QUARTO_MENU = new QuartoMenu();
     private static final HospedeMenu HOSPEDE_MENU = new HospedeMenu();
 
-    private static final int SAIR_MENU_INDEX = 4;
+    private static final int SAIR_MENU_INDEX = 3;
 }

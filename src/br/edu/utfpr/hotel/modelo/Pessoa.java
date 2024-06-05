@@ -48,7 +48,7 @@ public class Pessoa {
         private String telefone;
         private String endereco;
 
-        public Builder(String nome){
+        public Builder(String nome) {
             this.nome = nome;
         }
 
