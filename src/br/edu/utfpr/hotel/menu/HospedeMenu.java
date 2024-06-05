@@ -63,6 +63,7 @@ public class HospedeMenu extends AbstractMenu {
             System.out.println("Digite o id do hóspede que deseja fazer a reserva:");
             option = Hotel.INPUT.nextInt();
             if (option > 0 && option <= hospedeManager.size()) {
+                option--;
                 Quarto quarto = Quarto.QuartoManager.getInstance().getFirstAvailable();
                 hospedeManager.getHospede(option).setReserva(
                     new Reserva(
@@ -86,6 +87,7 @@ public class HospedeMenu extends AbstractMenu {
             System.out.println("Digite o id do hóspede que deseja fazer o checkout:");
             option = Hotel.INPUT.nextInt();
             if(option > 0 && option <= hospedeManager.size()) {
+                option--;
                 Hospede hospede = hospedeManager.getHospede(option);
                 Reserva reserva = hospede.getReserva();
                 if(reserva != null) {

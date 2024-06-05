@@ -20,7 +20,7 @@ public class Reserva implements IExibirDados {
 
     @Override
     public void exibirDados() {
-        System.out.printf("    - Reserva do quarto #%d por %d dias com diária de R$%.2f", quarto.getId(), getDuracao(), quarto.getValor());
+        System.out.printf("    - Reserva do quarto #%d por %d dias com diária de R$%.2f\n", quarto.getId(), getDuracao(), quarto.getValor());
     }
 
     public Hospede getHospede() { return hospede; }
