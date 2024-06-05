@@ -1,20 +1,33 @@
 package br.edu.utfpr.hotel.modelo;
 
-import br.edu.utfpr.hotel.Hotel;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class Hospede extends Pessoa implements IExibirDados {
 
-    protected final Reserva reserva = null; // FIXME
+    public Reserva reserva;
 
     public Hospede(String nome, String email, String telefone, String endereco) {
         super(nome, email, telefone, endereco);
     }
 
+
+    public Reserva getReserva() {
+        return reserva;
+    }
+
+    public void setReserva(Reserva reserva) {
+        this.reserva = reserva;
+    }
+
+
     @Override
     public void exibirDados() {
         System.out.printf("Nome: %s, Email: %s, Telefone: %s, Endereço: %s%n", getNome(), getEmail(), getTelefone(), getEndereco());
+        if(reserva != null) {
+            reserva.exibirDados();
+        }
     }
 
     public static class HospedeManager {
@@ -28,6 +41,10 @@ public class Hospede extends Pessoa implements IExibirDados {
             return instance;
         }
 
+        public Hospede getHospede(int index) {
+            return hospedes.get(index);
+        }
+
         public void addHospede(Hospede hospede) {
             hospedes.add(hospede);
         }
@@ -38,8 +55,16 @@ public class Hospede extends Pessoa implements IExibirDados {
             }
         }
 
-        public List<Hospede> getHospedes() {
-            return hospedes;
+        public int size() {
+            return hospedes.size();
+        }
+
+        public boolean isEmpty() {
+            return hospedes.isEmpty();
+        }
+
+        public void forEach(Consumer<? super Hospede> consumer) {
+            hospedes.forEach(consumer);
         }
     }
 

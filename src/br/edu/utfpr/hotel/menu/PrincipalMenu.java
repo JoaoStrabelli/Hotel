@@ -1,7 +1,6 @@
 package br.edu.utfpr.hotel.menu;
 
 import br.edu.utfpr.hotel.Hotel;
-import br.edu.utfpr.hotel.modelo.Hospede;
 
 public class PrincipalMenu {
 

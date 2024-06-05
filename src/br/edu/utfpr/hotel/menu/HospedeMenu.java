@@ -1,15 +1,20 @@
 package br.edu.utfpr.hotel.menu;
 
 import br.edu.utfpr.hotel.Hotel;
+import br.edu.utfpr.hotel.estado.Indisponivel;
+import br.edu.utfpr.hotel.estado.Ocupado;
 import br.edu.utfpr.hotel.modelo.Hospede;
 import br.edu.utfpr.hotel.modelo.Quarto;
+import br.edu.utfpr.hotel.modelo.Reserva;
+
+import java.time.LocalDate;
 
 public class HospedeMenu extends AbstractMenu {
     public HospedeMenu() {
         super(
                 "Hospede",
                 "Gerar Hospedes",
-                "Gerenciar Hospede",
+                "Adicionar Reserva",
                 "Listar Hospedes",
                 "Remover Hospede"
         );
@@ -21,10 +26,10 @@ public class HospedeMenu extends AbstractMenu {
     protected void gerar() {
         for (int i = 0; i < 30; i++) {
             Hospede hospede = new Hospede(
-                    "Nome" + (hospedeManager.getHospedes().size() + 1),
-                    "email" + (hospedeManager.getHospedes().size() + 1) + "@example.com",
-                    "Telefone" + (hospedeManager.getHospedes().size() + 1),
-                    "Endereço " + (hospedeManager.getHospedes().size() + 1)
+                    "Nome" + (hospedeManager.size() + 1),
+                    "email" + (hospedeManager.size() + 1) + "@example.com",
+                    "Telefone" + (hospedeManager.size() + 1),
+                    "Endereço " + (hospedeManager.size() + 1)
             );
             hospedeManager.addHospede(hospede);
         }
@@ -33,66 +38,83 @@ public class HospedeMenu extends AbstractMenu {
 
     @Override
     protected void gerenciar() {
-        if (hospedeManager.getHospedes().isEmpty()) {
-            System.out.println("ERRO: Não há hóspedes registrados. Tente novamente após registrar alguns hóspedes.");
-            return;
-        }
-
         int option;
         do {
-            System.out.println("Digite o índice do hóspede que deseja gerenciar ou 0 para voltar: ");
+            System.out.println("=== Gerenciar Hóspedes ===");
+            System.out.println("1 - Criar Reserva");
+            System.out.println("2 - Checkout / Remover Reserva");
+            System.out.println("3 - Sair");
             option = Hotel.INPUT.nextInt();
-            if (option > 0 && option <= hospedeManager.getHospedes().size()) {
-                Hospede hospede = hospedeManager.getHospedes().get(option - 1);
-                System.out.println("Hóspede selecionado:");
-                hospede.exibirDados();
+            switch(option) {
+                case 1:
+                    fazerReserva();
+                    break;
+                case 2:
+                    checkOut();
+                    break;
+                default:
+            }
+        } while(option != 3);
+    }
 
-                System.out.println("Digite o novo nome ou pressione Enter para manter o atual: ");
-                Hotel.INPUT.nextLine(); // Consume the newline
-                String nome = Hotel.INPUT.nextLine();
-                if (!nome.isEmpty()) {
-                    hospede.setNome(nome);
-                }
-
-                System.out.println("Digite o novo email ou pressione Enter para manter o atual: ");
-                String email = Hotel.INPUT.nextLine();
-                if (!email.isEmpty()) {
-                    hospede.setEmail(email);
-                }
-
-                System.out.println("Digite o novo telefone ou pressione Enter para manter o atual: ");
-                String telefone = Hotel.INPUT.nextLine();
-                if (!telefone.isEmpty()) {
-                    hospede.setTelefone(telefone);
-                }
-
-                System.out.println("Digite o novo endereço ou pressione Enter para manter o atual: ");
-                String endereco = Hotel.INPUT.nextLine();
-                if (!endereco.isEmpty()) {
-                    hospede.setEndereco(endereco);
-                }
-
-                System.out.println("Dados do hóspede atualizados com sucesso!");
+    private void fazerReserva() {
+        int option;
+        do {
+            System.out.println("Digite o id do hóspede que deseja fazer a reserva:");
+            option = Hotel.INPUT.nextInt();
+            if (option > 0 && option <= hospedeManager.size()) {
+                Quarto quarto = Quarto.QuartoManager.getInstance().getFirstAvailable();
+                hospedeManager.getHospede(option).setReserva(
+                    new Reserva(
+                        hospedeManager.getHospede(option),
+                        quarto,
+                        LocalDate.now(),
+                        LocalDate.now().plusDays(5)
+                    )
+                );
+                quarto.setEstado(new Ocupado(quarto));
+                System.out.println("Reserva realizada com sucesso!");
             } else if (option != 0) {
                 System.out.println("Índice inválido. Tente novamente.");
             }
         } while (option > 0);
     }
 
+    private void checkOut() {
+        int option;
+        do {
+            System.out.println("Digite o id do hóspede que deseja fazer o checkout:");
+            option = Hotel.INPUT.nextInt();
+            if(option > 0 && option <= hospedeManager.size()) {
+                Hospede hospede = hospedeManager.getHospede(option);
+                Reserva reserva = hospede.getReserva();
+                if(reserva != null) {
+                    reserva.getQuarto().setEstado(new Indisponivel(reserva.getQuarto()));
+                    hospede.setReserva(null);
+                } else {
+                    System.out.println("Hóspede informado não tem reservas.");
+                }
+                System.out.println("Reserva realizada com sucesso!");
+            } else if (option != 0) {
+                System.out.println("Índice inválido. Tente novamente.");
+            }
+        } while(option > 0);
+    }
+
     @Override
     protected void listar() {
-        int i = hospedeManager.getHospedes().size();
+        int i = hospedeManager.size();
         if (i == 0) {
             System.out.println("ERRO: Não há hóspedes registrados. Tente novamente após registrar alguns hóspedes.");
             return;
         }
         System.out.printf("Exibindo dados de todos os %s hóspedes:\n", i);
-        hospedeManager.getHospedes().forEach(Hospede::exibirDados);
+        hospedeManager.forEach(Hospede::exibirDados);
     }
 
     @Override
     protected void remover() {
-        if (hospedeManager.getHospedes().isEmpty()) {
+        if (hospedeManager.isEmpty()) {
             System.out.println("ERRO: Não há hóspedes registrados. Tente novamente após registrar alguns hóspedes.");
             return;
         }
@@ -101,7 +123,7 @@ public class HospedeMenu extends AbstractMenu {
         do {
             System.out.println("Digite o índice do hóspede ou 0 para voltar: ");
             option = Hotel.INPUT.nextInt();
-            if (option > 0 && option <= hospedeManager.getHospedes().size()) {
+            if (option > 0 && option <= hospedeManager.size()) {
                 hospedeManager.removeHospede(option - 1);
                 System.out.println("Hóspede removido com sucesso!");
             } else if (option != 0) {

@@ -92,8 +92,11 @@ public class Quarto implements IExibirDados {
             quartos.forEach(consumer);
         }
 
-        public List<Quarto> getQuartos() {
-            return quartos;
+        public Quarto getFirstAvailable() {
+            return quartos
+                .stream()
+                .filter(q -> q.estado.getNome().equals("Disponível"))
+                .findFirst().get();
         }
     }
 }
