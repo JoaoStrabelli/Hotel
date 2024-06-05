@@ -1,137 +1,75 @@
 package br.edu.utfpr.hotel.modelo;
 
-import br.edu.utfpr.hotel.Hotel;
 import java.util.ArrayList;
-import java.util.Random;
+import java.util.List;
+import java.util.function.Consumer;
 
-public class Hospede implements IExibirDados {
-    private String nome;
-    private String email;
-    private String telefone;
-    private String endereco;
+public class Hospede extends Pessoa implements IExibirDados {
 
-    public Hospede(String nome, String email, String telefone, String endereco) {
-        this.nome = nome;
-        this.email = email;
-        this.telefone = telefone;
-        this.endereco = endereco;
+    public Reserva reserva;
+
+    public Hospede(Builder builder, Reserva reserva) {
+        super(builder);
+        this.reserva = reserva;
     }
+
+    public Hospede(Builder builder) {
+        super(builder);
+    }
+
+    public Reserva getReserva() {
+        return reserva;
+    }
+
+    public void setReserva(Reserva reserva) {
+        this.reserva = reserva;
+    }
+
 
     @Override
     public void exibirDados() {
-        System.out.printf("Nome: %s, Email: %s, Telefone: %s, Endereço: %s%n", nome, email, telefone, endereco);
+        System.out.printf("Nome: %s, Email: %s, Telefone: %s, Endereço: %s%n", getNome(), getEmail(), getTelefone(), getEndereco());
+        if(reserva != null) {
+            reserva.exibirDados();
+        }
     }
 
-    // Getters e Setters
-    public String getNome() {
-        return nome;
-    }
+    public static class HospedeManager {
+        private static HospedeManager instance;
+        private final List<Hospede> hospedes = new ArrayList<>();
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getTelefone() {
-        return telefone;
-    }
-
-    public void setTelefone(String telefone) {
-        this.telefone = telefone;
-    }
-
-    public String getEndereco() {
-        return endereco;
-    }
-
-    public void setEndereco(String endereco) {
-        this.endereco = endereco;
-    }
-
-    public static void menu() {
-        int option;
-        do {
-            System.out.println("=== Hóspedes ===");
-            System.out.println("1 - Gerar Hóspedes");
-            System.out.println("2 - Mudar estado de Hóspede");
-            System.out.println("3 - Listar Hóspedes");
-            System.out.println("4 - Remover Hóspede");
-            System.out.println("5 - Voltar");
-            option = Hotel.INPUT.nextInt();
-            switch (option) {
-                case 1:
-                    gerarHospedes();
-                    break;
-                case 2:
-                    mudarEstadoDeHospede();
-                    break;
-                case 3:
-                    listarHospedes();
-                    break;
-                case 4:
-                    removerHospede();
-                    break;
-                default:
-                    break;
+        public static HospedeManager getInstance() {
+            if(instance == null) {
+                instance = new HospedeManager();
             }
-        } while (option != SAIR_MENU_HOSPEDE_INDEX);
-    }
-
-    private static void gerarHospedes() {
-        for (int i = 0; i < 30; i++) {
-            Hospede hospede = new Hospede(
-                    "Nome" + (HOSPEDES.size() + 1),
-                    "email" + (HOSPEDES.size() + 1) + "@example.com",
-                    "Telefone" + (HOSPEDES.size() + 1),
-                    "Endereço " + (HOSPEDES.size() + 1)
-            );
-            HOSPEDES.add(hospede);
-        }
-        System.out.println("30 hóspedes gerados com sucesso!");
-    }
-
-    private static void mudarEstadoDeHospede() {
-        // TODO: Implementar lógica para mudar o estado de um hóspede, se necessário
-    }
-
-    private static void removerHospede() {
-        if (HOSPEDES.isEmpty()) {
-            System.out.println("ERRO: Não há hóspedes registrados. Tente novamente após registrar alguns hóspedes.");
-            return;
+            return instance;
         }
 
-        int option;
-        do {
-            System.out.println("Digite o índice do hóspede ou 0 para voltar: ");
-            option = Hotel.INPUT.nextInt();
-            if (option > 0 && option <= HOSPEDES.size()) {
-                HOSPEDES.remove(option - 1);
-                System.out.println("Hóspede removido com sucesso!");
-            } else if (option != 0) {
-                System.out.println("Índice inválido. Tente novamente.");
+        public Hospede getHospede(int index) {
+            return hospedes.get(index);
+        }
+
+        public void addHospede(Hospede hospede) {
+            hospedes.add(hospede);
+        }
+
+        public void removeHospede(int index) {
+            if(index >= 0 && index < hospedes.size()) {
+                hospedes.remove(index);
             }
-        } while (option > 0);
-    }
-
-    private static void listarHospedes() {
-        int i = HOSPEDES.size();
-        if (i == 0) {
-            System.out.println("ERRO: Não há hóspedes registrados. Tente novamente após registrar alguns hóspedes.");
-            return;
         }
-        System.out.printf("Exibindo dados de todos os %s hóspedes:\n", i);
-        HOSPEDES.forEach(Hospede::exibirDados);
+
+        public int size() {
+            return hospedes.size();
+        }
+
+        public boolean isEmpty() {
+            return hospedes.isEmpty();
+        }
+
+        public void forEach(Consumer<? super Hospede> consumer) {
+            hospedes.forEach(consumer);
+        }
     }
 
-    private static final int SAIR_MENU_HOSPEDE_INDEX = 5;
-    public static final ArrayList<Hospede> HOSPEDES = new ArrayList<>();
 }
-
-
